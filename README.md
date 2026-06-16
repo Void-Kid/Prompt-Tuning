@@ -4,6 +4,8 @@
 
 Prompt 工作应该更像工程，少一些玄学。**Prompt Tuning** 是一个面向 Codex、Claude Code 等 agent 的 prompt 调优 skill，帮助 agent 诊断、改写、迁移和评估 prompt，让 prompt 相关工作更稳定、可复用、可验证。
 
+它整理了 OpenAI、Anthropic、Google、Qwen、Kimi 等主流模型官方公开的 prompting、agent instruction、structured output、tool use 最佳实践，也参考了 Prompting Guide 等系统化资料，并沉淀为自评案例、质量检查维度、迁移方法和输出模板。你可以把它交给 agent，在需要写、改、迁移或排查 prompt 时，直接获得有依据、可复用、可验证的产出。
+
 如果你经常遇到这些问题，这个 skill 值得一试：
 
 - Prompt 改了很多轮，效果仍然不稳定

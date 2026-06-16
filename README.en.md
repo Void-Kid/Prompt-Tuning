@@ -4,6 +4,8 @@ Language: [中文](README.md) | **English**
 
 Prompt work should feel more like engineering and less like guesswork. **Prompt Tuning** is a prompt-tuning skill for agents such as Codex and Claude Code. It helps agents diagnose, rewrite, migrate, and evaluate prompts so prompt-related work becomes more stable, reusable, and verifiable.
 
+It distills public best practices from major model providers such as OpenAI, Anthropic, Google, Qwen, and Kimi across prompting, agent instructions, structured outputs, and tool use. It also incorporates systematic resources such as Prompting Guide, then turns that knowledge into self-eval cases, quality checks, migration methods, and output templates. You can hand prompt work to an agent and get grounded, reusable, and verifiable outputs for writing, improving, migrating, or debugging prompts.
+
 Try this skill when you often run into issues like:
 
 - A prompt has gone through many edits but remains unstable
