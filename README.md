@@ -1,6 +1,8 @@
 # Prompt Tuning
 
-Prompt work should feel less like guessing and more like engineering. **Prompt Tuning** gives agents such as Codex and Claude Code a reusable way to diagnose, rewrite, migrate, and evaluate prompts with current model practices in mind.
+语言：**中文** | [English](README.en.md)
+
+Prompt 工作应该更像工程，少一些玄学。**Prompt Tuning** 是一个面向 Codex、Claude Code 等 agent 的 prompt 调优 skill，帮助 agent 诊断、改写、迁移和评估 prompt，让 prompt 相关工作更稳定、可复用、可验证。
 
 如果你经常遇到这些问题，这个 skill 值得一试：
 
@@ -10,29 +12,30 @@ Prompt work should feel less like guessing and more like engineering. **Prompt T
 - 同一个 prompt 在 Codex、Claude Code 或其他模型环境里表现不一致
 - 很难判断问题到底出在 prompt、工具、上下文、schema，还是 eval
 
-**Prompt Tuning** 的目标是把 prompt 相关工作变成一套可复用的诊断、改写和验证流程，让 agent 先判断问题应该在哪一层解决，再产出可直接使用的 prompt、patch、tool description、judge prompt 或改进建议。
+**Prompt Tuning** 的核心价值是让 agent 先判断问题应该在哪一层解决，再产出可直接使用的 prompt、patch、tool description、judge prompt 或改进建议。
 
-## What It Is
+## 它是什么
 
-**Prompt Tuning** is an agent skill for creating, reviewing, improving, migrating, debugging, and evaluating LLM prompts and prompt-like instructions.
+**Prompt Tuning** 用于创建、评审、改进、迁移、调试和评估 LLM prompt 以及 prompt-like instructions。
 
-It covers:
+它覆盖这些对象：
 
 - system / developer / user prompts
 - agent instructions
-- tool and function descriptions
-- structured output and JSON/schema prompts
-- RAG and context instructions
-- judge prompts and eval prompts
-- prompt templates and migration between agent runtimes
+- tool / function descriptions
+- structured output、JSON、schema prompts
+- RAG / context instructions
+- judge prompts 和 eval prompts
+- prompt templates
+- 不同 agent runtime 之间的 prompt 迁移
 
-它面向真实的 agent 工作流设计，关注的不只是“怎么把提示词写清楚”，还包括工具接口、结构化输出、上下文设计、模型状态、评估样例和跨模型迁移。
+它面向真实 agent 工作流设计，覆盖提示词表达、工具接口、结构化输出、上下文设计、模型状态、评估样例和跨模型迁移。
 
-## How It Works
+## 它怎么工作
 
-Prompt Tuning follows a simple loop:
+Prompt Tuning 使用一个简单流程：
 
-1. **Diagnose the intervention layer**
+1. **诊断干预层**
    - prompt wording
    - instruction hierarchy
    - tool/schema contract
@@ -43,40 +46,40 @@ Prompt Tuning follows a simple loop:
    - model parameters or model choice
    - eval gap
 
-2. **Choose the smallest useful change**
-   - rewrite prompt text when wording is the bottleneck
-   - improve tool descriptions when tool choice or arguments fail
-   - tighten schema or structured output contracts when format breaks
-   - adjust context/RAG instructions when retrieval or grounding is weak
-   - add eval cases when the issue cannot be verified
+2. **选择最小有效改动**
+   - 文案是瓶颈时，改写 prompt
+   - 工具选择或参数出错时，改进 tool description
+   - 输出格式不稳定时，收紧 schema 或 structured output contract
+   - 检索或上下文不足时，调整 RAG/context instructions
+   - 问题无法验证时，补充 eval cases
 
-3. **Return something usable**
-   - a copy-ready prompt
-   - a prompt patch
-   - a tool description contract
-   - a judge prompt
+3. **返回可直接使用的结果**
+   - copy-ready prompt
+   - prompt patch
+   - tool description contract
+   - judge prompt
    - minimal eval cases
-   - clear risks, assumptions, and non-prompt requirements
+   - 风险、假设和非 prompt 侧要求
 
-## Why This Exists
+## 为什么需要它
 
-Modern models are strong enough that older prompting habits can become counterproductive. Long, over-specified prompts often hide the real issue. Many failures come from tool surfaces, schemas, retrieved context, state handling, parser rules, eval gaps, or model/runtime mismatch.
+现代模型能力很强，传统 prompt 习惯有时会带来副作用。过长、过度规定的 prompt 往往会掩盖真正的问题。很多失败来自工具设计、schema、检索上下文、状态处理、parser 规则、eval 缺口或模型/runtime 不匹配。
 
-Prompt Tuning helps an agent avoid blind prompt piling by making the diagnosis explicit before changing the prompt.
+Prompt Tuning 会把诊断过程显性化，让 agent 在改 prompt 之前先判断应该改哪一层。
 
-## Source Basis
+## 参考来源
 
-This skill distills public guidance and engineering practices from major model providers and prompting resources, including:
+这个 skill 整理了主流模型官方公开资料和工程实践，包括：
 
-- OpenAI prompt guidance, function calling, structured outputs, and Model Spec
-- Anthropic prompt engineering, eval development, context engineering, and tool design guidance
-- Google Gemini prompting, function calling, structured output, thinking/tool state, and optimizer guidance
-- Qwen, Kimi, DeepSeek, Meta Llama, Mistral, xAI, Perplexity, Cohere, and Bedrock model/runtime guidance
-- Prompting Guide and related context engineering material
+- OpenAI prompt guidance、function calling、structured outputs 和 Model Spec
+- Anthropic prompt engineering、eval development、context engineering 和 tool design guidance
+- Google Gemini prompting、function calling、structured output、thinking/tool state 和 optimizer guidance
+- Qwen、Kimi、DeepSeek、Meta Llama、Mistral、xAI、Perplexity、Cohere、Bedrock 等模型和 runtime 指引
+- Prompting Guide 以及 context engineering 相关资料
 
-The skill keeps these practices in `references/` and uses a source map to track where each principle came from and when model-specific guidance should be checked again.
+这些内容沉淀在 `references/` 中，并通过 source map 记录原则来源和模型相关建议的时效性。
 
-## Repository Structure
+## 仓库结构
 
 ```text
 skills/
@@ -87,50 +90,50 @@ skills/
     references/
 ```
 
-Key files:
+关键文件：
 
-- `skills/prompt-tuning/SKILL.md`: the skill entrypoint and workflow
-- `skills/prompt-tuning/assets/`: reusable prompt, review, patch, eval, tool, judge, and RAG templates
-- `skills/prompt-tuning/references/`: principles, model-specific notes, migration guidance, eval guidance, and source map
+- `skills/prompt-tuning/SKILL.md`：skill 入口和工作流
+- `skills/prompt-tuning/assets/`：prompt、review、patch、eval、tool、judge、RAG 等模板
+- `skills/prompt-tuning/references/`：核心原则、模型参考、迁移方法、eval 方法和 source map
 
-## How To Use
+## 使用方式
 
-Use `skills/prompt-tuning` as a local agent skill in any environment that supports skill-style instructions.
+把 `skills/prompt-tuning` 作为本地 agent skill 放到支持 skill-style instructions 的 agent 环境中使用。
 
-Typical usage:
+典型流程：
 
-1. Add or reference the `skills/prompt-tuning` directory in your agent environment.
-2. Ask the agent to use Prompt Tuning when the task involves prompt creation, review, improvement, migration, debugging, or eval design.
-3. Provide the current prompt, target model/runtime, failure examples, expected output, tools/schema/context constraints, and any latency or cost constraints.
+1. 在 agent 环境中添加或引用 `skills/prompt-tuning` 目录。
+2. 当任务涉及 prompt 创建、评审、改进、迁移、调试或 eval 设计时，让 agent 使用 Prompt Tuning。
+3. 提供当前 prompt、目标模型/runtime、失败样例、期望输出、工具/schema/context 约束，以及成本或延迟限制。
 
-Example requests:
+示例请求：
 
 ```text
-Use Prompt Tuning to improve this system prompt and reduce JSON format errors.
+用 Prompt Tuning 改进这个 system prompt，减少 JSON 格式错误。
 ```
 
 ```text
-用 Prompt Tuning 评审这个 agent instruction，判断问题是不是 prompt 本身导致的。
+用 Prompt Tuning 评审这个 agent instruction，判断问题应该在哪一层解决。
 ```
 
 ```text
-Migrate this Codex prompt to Claude Code agent instructions.
+把这个 Codex prompt 迁移成 Claude Code agent instructions。
 ```
 
 ```text
 帮我为这个 tool 写 description，并给最小 eval cases。
 ```
 
-## Output Style
+## 输出风格
 
-For simple creation tasks, the skill returns:
+简单创建任务通常返回：
 
-- copy-ready prompt
-- usage notes
-- assumptions when needed
-- minimal eval cases
+- 可直接复制使用的 prompt
+- 使用说明
+- 必要假设
+- 最小 eval cases
 
-For review, improvement, migration, or debugging tasks, the skill returns:
+评审、改进、迁移或调试任务通常返回：
 
 - Prompt Artifact / Patch
 - Intervention Layer
@@ -139,15 +142,11 @@ For review, improvement, migration, or debugging tasks, the skill returns:
 - Minimal Eval
 - Risk and Tradeoff
 
-## Boundaries
+## 边界
 
-Prompt Tuning focuses on prompt and prompt-adjacent instruction work. For ordinary writing, general code review, plugin creation, skill authoring, installation workflows, and broad security audits, use a more specific workflow.
+Prompt Tuning 聚焦 prompt 和 prompt-adjacent instruction 工作。普通写作、通用代码 review、plugin 创建、skill 编写、安装流程和完整安全审计，更适合交给对应的专门工作流。
 
-Provider-specific behavior changes quickly. When a task depends on latest model behavior, tool calling, structured outputs, reasoning state, prompt caching, or parser rules, the skill uses a freshness gate and should be checked against current official sources.
-
-## English Summary
-
-**Prompt Tuning** is a practical agent skill for prompt engineering, context engineering, tool description design, structured output prompting, prompt migration, and prompt evaluation. It helps agents diagnose the right intervention layer before rewriting, then produce usable prompts, patches, contracts, or eval cases grounded in current model-provider guidance.
+模型供应商行为变化很快。任务涉及最新模型行为、tool calling、structured outputs、reasoning state、prompt caching 或 parser 规则时，应结合当前官方资料再次确认。
 
 ## License
 
