@@ -1,0 +1,4 @@
+interface:
+  display_name: "Prompt Tuning"
+  short_description: "产出、评审和改进 LLM prompts"
+  default_prompt: "使用 $prompt-tuning 创建、评审或改进一个 prompt，优先给出可直接使用的 prompt、patch 和最小 eval cases。"

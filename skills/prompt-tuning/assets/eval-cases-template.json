@@ -1,0 +1,52 @@
+{
+  "id": "prompt-eval-case",
+  "task": "Evaluate whether the optimized prompt produces the target behavior.",
+  "primary_intervention_layer": "prompt wording",
+  "non_prompt_requirements": [
+    "Record schema, tool, context, runtime, provider state, parser, model parameter, or eval requirements that must accompany the prompt."
+  ],
+  "provider_runtime_assumptions": {
+    "provider": "model provider used in this eval",
+    "model": "model name or family",
+    "api_surface": "chat, responses, function calling, batch, app runtime, or local harness",
+    "structured_output": "schema, JSON mode, parser, or none",
+    "tool_loop_state": "reasoning items, thought signatures, reasoning_content, tool messages, or none",
+    "reasoning_or_thinking_control": "reasoning effort, thinking level, temperature, verbosity, or none"
+  },
+  "input_variables": {
+    "user_input": "Representative user input",
+    "context": "Relevant dynamic context"
+  },
+  "fixed_prompt": "Stable prompt text under evaluation",
+  "dynamic_context": "Retrieved content, tool results, user data, or runtime state supplied at execution time",
+  "expected_behavior": "Observable behavior the model output must satisfy",
+  "rubric_or_ground_truth": {
+    "type": "rubric",
+    "criteria": [
+      "Correctly follows the objective",
+      "Respects hard constraints",
+      "Returns the expected output shape"
+    ]
+  },
+  "scorer_type": "llm_judge",
+  "pass_threshold": 4,
+  "baseline_result": {
+    "prompt_version": "baseline",
+    "score": null,
+    "failure_summary": "Run before optimization"
+  },
+  "optimized_result": {
+    "prompt_version": "optimized",
+    "score": null,
+    "improvement_summary": "Run after optimization"
+  },
+  "failure_taxonomy": [
+    "instruction_miss",
+    "format_failure",
+    "tool_selection_error",
+    "unsupported_claim",
+    "verbosity_mismatch",
+    "provider_state_error"
+  ],
+  "cost_latency_notes": "Record token, latency, and reasoning/tool-call changes when available."
+}

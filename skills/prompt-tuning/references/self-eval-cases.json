@@ -1,0 +1,327 @@
+{
+  "positive": [
+    {
+      "id": "low-info-create-prompt",
+      "request": "帮我写 prompt",
+      "query": "帮我写 prompt",
+      "fixtures": {},
+      "expected_trigger": true,
+      "expected_resources": [],
+      "max_questions": 1,
+      "output_assertions": {
+        "must_include": ["one clarifying question"],
+        "artifact_first": false
+      },
+      "must_not": ["explain prompt engineering theory", "ask more than one question"]
+    },
+    {
+      "id": "model-agnostic-v0",
+      "request": "帮我写一个用于客服工单分类的 prompt",
+      "query": "帮我写一个用于客服工单分类的 prompt",
+      "fixtures": {
+        "target_model": null,
+        "failure_output": null
+      },
+      "expected_trigger": true,
+      "expected_resources": ["assets/create-prompt-template.md"],
+      "max_questions": 0,
+      "output_assertions": {
+        "must_include": ["Prompt:", "Usage:", "Minimal Eval Cases:"],
+        "artifact_first": true
+      },
+      "must_not": ["ask for provider before drafting", "only provide theory"]
+    }
+  ],
+  "negative": [
+    {
+      "id": "negative-code-review",
+      "request": "帮我 review 这个 React 组件代码",
+      "query": "帮我 review 这个 React 组件代码",
+      "fixtures": {},
+      "expected_trigger": false,
+      "expected_resources": [],
+      "max_questions": 0,
+      "output_assertions": {
+        "must_include": ["should not load prompt-tuning"],
+        "artifact_first": false
+      },
+      "must_not": ["prompt patch", "prompt eval"]
+    },
+    {
+      "id": "negative-skill-tuning",
+      "request": "帮我改进这个 SKILL.md 的触发 description",
+      "query": "帮我改进这个 SKILL.md 的触发 description",
+      "fixtures": {},
+      "expected_trigger": false,
+      "expected_resources": [],
+      "max_questions": 0,
+      "output_assertions": {
+        "must_include": ["belongs to skill-tuning"],
+        "artifact_first": false
+      },
+      "must_not": ["load prompt-tuning as primary skill"]
+    },
+    {
+      "id": "ordinary-writing-negative",
+      "request": "帮我写一篇小红书文案，主题是周末咖啡店探店。",
+      "query": "帮我写一篇小红书文案，主题是周末咖啡店探店。",
+      "fixtures": {},
+      "expected_trigger": false,
+      "expected_resources": [],
+      "max_questions": 0,
+      "output_assertions": {
+        "must_include": ["ordinary content writing"],
+        "artifact_first": false
+      },
+      "must_not": ["prompt patch", "Intervention Layer"]
+    }
+  ],
+  "adjacent_confusion": [
+    {
+      "id": "plugin-creation-is-not-prompt-tuning",
+      "request": "帮我创建一个 Codex plugin，包含 manifest 和 MCP server",
+      "query": "帮我创建一个 Codex plugin，包含 manifest 和 MCP server",
+      "fixtures": {},
+      "expected_trigger": false,
+      "expected_resources": [],
+      "max_questions": 0,
+      "output_assertions": {
+        "must_include": ["plugin workflow"],
+        "artifact_first": false
+      },
+      "must_not": ["prompt review template"]
+    }
+  ],
+  "known_failures": [
+    {
+      "id": "no-theory-only-output",
+      "request": "优化这个 prompt：你是助手，请回答用户问题。",
+      "query": "优化这个 prompt：你是助手，请回答用户问题。",
+      "fixtures": {
+        "current_prompt": "你是助手，请回答用户问题。"
+      },
+      "expected_trigger": true,
+      "expected_resources": ["assets/prompt-review-template.md"],
+      "max_questions": 0,
+      "output_assertions": {
+        "must_include": ["Prompt 产物 / Patch（Prompt Artifact / Patch）", "最小 Eval（Minimal Eval）"],
+        "artifact_first": true
+      },
+      "must_not": ["only explain prompt engineering principles"]
+    },
+    {
+      "id": "patch-only-search-replace",
+      "request": "只给我这个 prompt 的 patch，把要求 JSON 的部分改得更可靠。",
+      "query": "只给我这个 prompt 的 patch，把要求 JSON 的部分改得更可靠。",
+      "fixtures": {
+        "current_prompt": "请一定输出 JSON，不要输出其他内容。"
+      },
+      "expected_trigger": true,
+      "expected_resources": ["assets/prompt-patch-template.md", "references/tool-and-structured-output-guidance.md"],
+      "max_questions": 0,
+      "output_assertions": {
+        "must_include": ["SEARCH:", "REPLACE:"],
+        "artifact_first": true
+      },
+      "must_not": ["full essay", "empty Prompt Artifact / Patch section"]
+    },
+    {
+      "id": "artifact-first-output",
+      "request": "改进这个 prompt，先给我可复制版本：你是客服助手，请回答。",
+      "query": "改进这个 prompt，先给我可复制版本：你是客服助手，请回答。",
+      "fixtures": {
+        "current_prompt": "你是客服助手，请回答。"
+      },
+      "expected_trigger": true,
+      "expected_resources": ["assets/prompt-review-template.md"],
+      "max_questions": 0,
+      "output_assertions": {
+        "must_include": ["Prompt 产物 / Patch（Prompt Artifact / Patch）", "干预层（Intervention Layer）", "最小 Eval（Minimal Eval）"],
+        "artifact_first": true
+      },
+      "must_not": ["start with theory", "hide the improved prompt after analysis"]
+    }
+  ],
+  "progressive_loading": [
+    {
+      "id": "tool-reasoning-state",
+      "request": "这个 Gemini tool calling prompt 迁移后 400，帮我调 prompt 和调用约定。",
+      "query": "这个 Gemini tool calling prompt 迁移后 400，帮我调 prompt 和调用约定。",
+      "fixtures": {
+        "provider": "google",
+        "failure": "400 after function calling with thinking enabled"
+      },
+      "expected_trigger": true,
+      "expected_resources": ["references/models/index.md", "references/models/google.md", "references/tool-and-structured-output-guidance.md"],
+      "max_questions": 1,
+      "output_assertions": {
+        "must_include": ["thought signatures", "Prompt 产物 / Patch（Prompt Artifact / Patch）", "非 Prompt 侧要求（Non-Prompt Requirements）"],
+        "artifact_first": true
+      },
+      "must_not": ["only rewrite wording", "ignore provider state"]
+    },
+    {
+      "id": "tool-contract-root-cause",
+      "request": "agent 经常把 search_docs 和 search_web 调反，帮我调 prompt。",
+      "query": "agent 经常把 search_docs 和 search_web 调反，帮我调 prompt。",
+      "fixtures": {
+        "tools": ["search_docs", "search_web"],
+        "failure": "wrong adjacent tool selected"
+      },
+      "expected_trigger": true,
+      "expected_resources": ["references/tool-and-structured-output-guidance.md", "assets/tool-description-contract.md"],
+      "max_questions": 1,
+      "output_assertions": {
+        "must_include": ["tool/schema contract", "tool description", "namespace", "非 Prompt 侧要求（Non-Prompt Requirements）", "最小 Eval（Minimal Eval）"],
+        "artifact_first": true
+      },
+      "must_not": ["only add please use the right tool", "ignore tool surface"]
+    },
+    {
+      "id": "freshness-required",
+      "request": "按最新 GPT、Claude、Gemini 官方最佳实践改这个 prompt。",
+      "query": "按最新 GPT、Claude、Gemini 官方最佳实践改这个 prompt。",
+      "fixtures": {
+        "current_prompt": "你是助手，请认真回答。",
+        "freshness": "latest requested"
+      },
+      "expected_trigger": true,
+      "expected_resources": [
+        "references/source-map.md",
+        "references/models/index.md",
+        "references/models/openai.md",
+        "references/models/anthropic.md",
+        "references/models/google.md"
+      ],
+      "max_questions": 1,
+      "output_assertions": {
+        "must_include": ["Freshness Gate", "official", "Prompt 产物 / Patch（Prompt Artifact / Patch）", "source"],
+        "artifact_first": true
+      },
+      "must_not": ["rely only on memory", "treat PromptingGuide as current authority"]
+    },
+    {
+      "id": "judge-prompt-loads-eval-reference",
+      "request": "写一个 judge prompt 来评估客服分类 prompt 是否正确。",
+      "query": "写一个 judge prompt 来评估客服分类 prompt 是否正确。",
+      "fixtures": {},
+      "expected_trigger": true,
+      "expected_resources": ["assets/judge-prompt-rubric.md", "references/eval-and-optimization-method.md"],
+      "max_questions": 1,
+      "output_assertions": {
+        "must_include": ["score anchors", "rubric", "最小 Eval（Minimal Eval）"],
+        "artifact_first": true
+      },
+      "must_not": ["subjective quality only"]
+    }
+  ],
+  "end_to_end": [
+    {
+      "id": "improve-failing-prompt",
+      "request": "这个 prompt 经常输出多余解释，帮我改：'请分析输入并返回 JSON。' 失败输出：'下面是 JSON：{\"label\":\"sales\"}'",
+      "query": "这个 prompt 经常输出多余解释，帮我改：'请分析输入并返回 JSON。' 失败输出：'下面是 JSON：{\"label\":\"sales\"}'",
+      "fixtures": {
+        "current_prompt": "请分析输入并返回 JSON。",
+        "failure_output": "下面是 JSON：{\"label\":\"sales\"}"
+      },
+      "expected_trigger": true,
+      "expected_resources": ["assets/prompt-review-template.md", "references/tool-and-structured-output-guidance.md", "references/eval-and-optimization-method.md"],
+      "max_questions": 0,
+      "output_assertions": {
+        "must_include": ["Prompt 产物 / Patch（Prompt Artifact / Patch）", "schema", "format-or-schema-failure"],
+        "artifact_first": true
+      },
+      "must_not": ["just say use JSON", "omit eval cases"]
+    },
+    {
+      "id": "non-prompt-root-cause",
+      "request": "这个 prompt 偶尔输出坏 JSON，帮我优化 prompt：请返回 {label, confidence}。",
+      "query": "这个 prompt 偶尔输出坏 JSON，帮我优化 prompt：请返回 {label, confidence}。",
+      "fixtures": {
+        "current_prompt": "请返回 {label, confidence}。",
+        "failure_output": "label: sales, confidence: high",
+        "runtime": "API supports structured outputs"
+      },
+      "expected_trigger": true,
+      "expected_resources": ["assets/prompt-review-template.md", "references/tool-and-structured-output-guidance.md", "references/eval-and-optimization-method.md"],
+      "max_questions": 0,
+      "output_assertions": {
+        "must_include": ["Prompt 产物 / Patch（Prompt Artifact / Patch）", "干预层（Intervention Layer）", "structured output", "非 Prompt 侧要求（Non-Prompt Requirements）", "schema", "最小 Eval（Minimal Eval）"],
+        "artifact_first": true
+      },
+      "must_not": ["only make the prompt longer", "ignore schema"]
+    },
+    {
+      "id": "eval-required",
+      "request": "这是生产客服 agent 的 system prompt，帮我改得更稳定，并给验证用例。",
+      "query": "这是生产客服 agent 的 system prompt，帮我改得更稳定，并给验证用例。",
+      "fixtures": {
+        "current_prompt": "你是客服 agent，帮助用户解决问题。",
+        "risk_level": "production"
+      },
+      "expected_trigger": true,
+      "expected_resources": ["assets/prompt-review-template.md", "references/eval-and-optimization-method.md", "assets/eval-cases-template.json"],
+      "max_questions": 1,
+      "output_assertions": {
+        "must_include": ["最小 Eval（Minimal Eval）", "happy-path", "edge", "forbidden", "regression", "rubric"],
+        "artifact_first": true
+      },
+      "must_not": ["omit eval cases", "label production prompt as low risk"]
+    }
+  ],
+  "output_language": [
+    {
+      "id": "mirror-english-review-language",
+      "request": "Review this prompt and improve it: You are a support classifier. Return JSON only.",
+      "query": "Review this prompt and improve it: You are a support classifier. Return JSON only.",
+      "fixtures": {
+        "current_prompt": "You are a support classifier. Return JSON only."
+      },
+      "expected_trigger": true,
+      "expected_resources": ["assets/prompt-review-template.md", "references/tool-and-structured-output-guidance.md"],
+      "max_questions": 0,
+      "output_assertions": {
+        "must_include": ["Prompt Artifact / Patch", "Minimal Eval"],
+        "artifact_first": true
+      },
+      "must_not": ["Chinese section labels", "only explain in Chinese"]
+    }
+  ],
+  "cross_runtime": [
+    {
+      "id": "migrate-codex-prompt-to-claude-code",
+      "request": "把这个 Codex developer prompt 迁移成 Claude Code agent instructions，并保留工具边界：Always inspect files before editing; use apply_patch for edits.",
+      "query": "把这个 Codex developer prompt 迁移成 Claude Code agent instructions，并保留工具边界：Always inspect files before editing; use apply_patch for edits.",
+      "fixtures": {
+        "source_runtime": "codex",
+        "target_runtime": "claude-code",
+        "current_prompt": "Always inspect files before editing; use apply_patch for edits."
+      },
+      "expected_trigger": true,
+      "expected_resources": ["references/migration-playbook.md", "references/context-and-agent-guidance.md", "references/models/index.md", "references/models/anthropic.md"],
+      "max_questions": 1,
+      "output_assertions": {
+        "must_include": ["migrate", "agent instructions", "工具边界", "风险和取舍（Risk And Tradeoff）"],
+        "artifact_first": true
+      },
+      "must_not": ["ignore target runtime", "assume Codex-only tools exist in Claude Code"]
+    },
+    {
+      "id": "provider-state-migration",
+      "request": "把 OpenAI Responses 多轮 tool prompt 迁移到 Gemini、Kimi、Qwen，并保留工具循环行为。",
+      "query": "把 OpenAI Responses 多轮 tool prompt 迁移到 Gemini、Kimi、Qwen，并保留工具循环行为。",
+      "fixtures": {
+        "source_runtime": "OpenAI Responses",
+        "target_runtimes": ["Gemini function calling", "Kimi K2.6 thinking", "Qwen3 2507"]
+      },
+      "expected_trigger": true,
+      "expected_resources": ["references/models/index.md", "references/models/openai.md", "references/models/google.md", "references/models/kimi.md", "references/models/qwen.md", "references/tool-and-structured-output-guidance.md", "references/migration-playbook.md"],
+      "max_questions": 1,
+      "output_assertions": {
+        "must_include": ["reasoning items", "thought signatures", "reasoning_content", "thinking mode", "非 Prompt 侧要求（Non-Prompt Requirements）"],
+        "artifact_first": true
+      },
+      "must_not": ["treat reasoning state as prompt text", "ignore provider state"]
+    }
+  ]
+}
