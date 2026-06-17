@@ -1,43 +1,43 @@
 # Prompt Tuning
 
-语言：**中文** | [English](README.en.md)
+Language: **English** | [中文](README.zh-CN.md)
 
-Prompt 工作应该更像工程，少一些玄学。**Prompt Tuning** 是一个面向 Codex、Claude Code 等 agent 的 prompt 调优 skill，帮助 agent 诊断、改写、迁移和评估 prompt，让 prompt 相关工作更稳定、可复用、可验证。
+Prompt work should feel more like engineering and less like guesswork. **Prompt Tuning** is a prompt-tuning skill for agents such as Codex and Claude Code. It helps agents diagnose, rewrite, migrate, and evaluate prompts so prompt-related work becomes more stable, reusable, and verifiable.
 
-它整理了 OpenAI、Anthropic、Google、Qwen、Kimi 等主流模型官方公开的 prompting、agent instruction、structured output、tool use 最佳实践，也参考了 Prompting Guide 等系统化资料，并沉淀为自评案例、质量检查维度、迁移方法和输出模板。你可以把它交给 agent，在需要写、改、迁移或排查 prompt 时，直接获得有依据、可复用、可验证的产出。
+It distills public best practices from major model providers such as OpenAI, Anthropic, Google, Qwen, and Kimi across prompting, agent instructions, structured outputs, and tool use. It also incorporates systematic resources such as Prompting Guide, then turns that knowledge into self-eval cases, quality checks, migration methods, and output templates. You can hand prompt work to an agent and get grounded, reusable, and verifiable outputs for writing, improving, migrating, or debugging prompts.
 
-如果你经常遇到这些问题，这个 skill 值得一试：
+Try this skill when you often run into issues like:
 
-- Prompt 改了很多轮，效果仍然不稳定
-- JSON、schema、tool calling 经常出格式错误
-- System prompt / developer prompt / agent instructions 越写越长
-- 同一个 prompt 在 Codex、Claude Code 或其他模型环境里表现不一致
-- 很难判断问题到底出在 prompt、工具、上下文、schema，还是 eval
+- A prompt has gone through many edits but remains unstable
+- JSON, schema, or tool-calling outputs keep breaking
+- System prompts, developer prompts, or agent instructions keep growing longer
+- The same prompt behaves differently across Codex, Claude Code, or other model runtimes
+- It is unclear whether the problem lives in the prompt, tool surface, context, schema, or eval
 
-**Prompt Tuning** 的核心价值是让 agent 先判断问题应该在哪一层解决，再产出可直接使用的 prompt、patch、tool description、judge prompt 或改进建议。
+The core value of **Prompt Tuning** is to help an agent identify the right intervention layer before producing a usable prompt, patch, tool description, judge prompt, or concrete improvement plan.
 
-## 它是什么
+## What It Is
 
-**Prompt Tuning** 用于创建、评审、改进、迁移、调试和评估 LLM prompt 以及 prompt-like instructions。
+**Prompt Tuning** is an agent skill for creating, reviewing, improving, migrating, debugging, and evaluating LLM prompts and prompt-like instructions.
 
-它覆盖这些对象：
+It covers:
 
 - system / developer / user prompts
 - agent instructions
 - tool / function descriptions
-- structured output、JSON、schema prompts
+- structured output, JSON, and schema prompts
 - RAG / context instructions
-- judge prompts 和 eval prompts
+- judge prompts and eval prompts
 - prompt templates
-- 不同 agent runtime 之间的 prompt 迁移
+- prompt migration across agent runtimes
 
-它面向真实 agent 工作流设计，覆盖提示词表达、工具接口、结构化输出、上下文设计、模型状态、评估样例和跨模型迁移。
+It is designed for real agent workflows and covers prompt wording, tool interfaces, structured outputs, context design, model state, evaluation cases, and cross-model migration.
 
-## 它怎么工作
+## How It Works
 
-Prompt Tuning 使用一个简单流程：
+Prompt Tuning follows a simple loop:
 
-1. **诊断干预层**
+1. **Diagnose the intervention layer**
    - prompt wording
    - instruction hierarchy
    - tool/schema contract
@@ -48,40 +48,40 @@ Prompt Tuning 使用一个简单流程：
    - model parameters or model choice
    - eval gap
 
-2. **选择最小有效改动**
-   - 文案是瓶颈时，改写 prompt
-   - 工具选择或参数出错时，改进 tool description
-   - 输出格式不稳定时，收紧 schema 或 structured output contract
-   - 检索或上下文不足时，调整 RAG/context instructions
-   - 问题无法验证时，补充 eval cases
+2. **Choose the smallest useful change**
+   - rewrite prompt text when wording is the bottleneck
+   - improve tool descriptions when tool choice or arguments fail
+   - tighten schema or structured output contracts when formatting breaks
+   - adjust RAG/context instructions when retrieval or grounding is weak
+   - add eval cases when the issue cannot be verified
 
-3. **返回可直接使用的结果**
+3. **Return something usable**
    - copy-ready prompt
    - prompt patch
    - tool description contract
    - judge prompt
    - minimal eval cases
-   - 风险、假设和非 prompt 侧要求
+   - risks, assumptions, and non-prompt requirements
 
-## 为什么需要它
+## Why It Exists
 
-现代模型能力很强，传统 prompt 习惯有时会带来副作用。过长、过度规定的 prompt 往往会掩盖真正的问题。很多失败来自工具设计、schema、检索上下文、状态处理、parser 规则、eval 缺口或模型/runtime 不匹配。
+Modern models are powerful enough that older prompting habits can become counterproductive. Long, over-specified prompts often hide the real issue. Many failures come from tool design, schemas, retrieved context, state handling, parser rules, eval gaps, or model/runtime mismatch.
 
-Prompt Tuning 会把诊断过程显性化，让 agent 在改 prompt 之前先判断应该改哪一层。
+Prompt Tuning makes the diagnostic step explicit so an agent can decide what layer to change before rewriting the prompt.
 
-## 参考来源
+## Source Basis
 
-这个 skill 整理了主流模型官方公开资料和工程实践，包括：
+This skill distills public guidance and engineering practices from major model providers and prompting resources, including:
 
-- OpenAI prompt guidance、function calling、structured outputs 和 Model Spec
-- Anthropic prompt engineering、eval development、context engineering 和 tool design guidance
-- Google Gemini prompting、function calling、structured output、thinking/tool state 和 optimizer guidance
-- Qwen、Kimi、DeepSeek、Meta Llama、Mistral、xAI、Perplexity、Cohere、Bedrock 等模型和 runtime 指引
-- Prompting Guide 以及 context engineering 相关资料
+- OpenAI prompt guidance, function calling, structured outputs, and Model Spec
+- Anthropic prompt engineering, eval development, context engineering, and tool design guidance
+- Google Gemini prompting, function calling, structured output, thinking/tool state, and optimizer guidance
+- Qwen, Kimi, DeepSeek, Meta Llama, Mistral, xAI, Perplexity, Cohere, and Bedrock model/runtime guidance
+- Prompting Guide and related context engineering material
 
-这些内容沉淀在 `references/` 中，并通过 source map 记录原则来源和模型相关建议的时效性。
+These practices live in `references/`, with a source map that tracks where each principle came from and when model-specific guidance should be checked again.
 
-## 仓库结构
+## Repository Structure
 
 ```text
 skills/
@@ -92,50 +92,50 @@ skills/
     references/
 ```
 
-关键文件：
+Key files:
 
-- `skills/prompt-tuning/SKILL.md`：skill 入口和工作流
-- `skills/prompt-tuning/assets/`：prompt、review、patch、eval、tool、judge、RAG 等模板
-- `skills/prompt-tuning/references/`：核心原则、模型参考、迁移方法、eval 方法和 source map
+- `skills/prompt-tuning/SKILL.md`: the skill entrypoint and workflow
+- `skills/prompt-tuning/assets/`: reusable prompt, review, patch, eval, tool, judge, and RAG templates
+- `skills/prompt-tuning/references/`: principles, model-specific notes, migration guidance, eval guidance, and source map
 
-## 使用方式
+## How To Use
 
-把 `skills/prompt-tuning` 作为本地 agent skill 放到支持 skill-style instructions 的 agent 环境中使用。
+Use `skills/prompt-tuning` as a local agent skill in any environment that supports skill-style instructions.
 
-典型流程：
+Typical flow:
 
-1. 在 agent 环境中添加或引用 `skills/prompt-tuning` 目录。
-2. 当任务涉及 prompt 创建、评审、改进、迁移、调试或 eval 设计时，让 agent 使用 Prompt Tuning。
-3. 提供当前 prompt、目标模型/runtime、失败样例、期望输出、工具/schema/context 约束，以及成本或延迟限制。
+1. Add or reference the `skills/prompt-tuning` directory in your agent environment.
+2. Ask the agent to use Prompt Tuning when the task involves prompt creation, review, improvement, migration, debugging, or eval design.
+3. Provide the current prompt, target model/runtime, failure examples, expected output, tool/schema/context constraints, and any latency or cost constraints.
 
-示例请求：
+Example requests:
 
 ```text
-用 Prompt Tuning 改进这个 system prompt，减少 JSON 格式错误。
+Use Prompt Tuning to improve this system prompt and reduce JSON format errors.
 ```
 
 ```text
-用 Prompt Tuning 评审这个 agent instruction，判断问题应该在哪一层解决。
+Use Prompt Tuning to review this agent instruction and identify the right intervention layer.
 ```
 
 ```text
-把这个 Codex prompt 迁移成 Claude Code agent instructions。
+Migrate this Codex prompt to Claude Code agent instructions.
 ```
 
 ```text
-帮我为这个 tool 写 description，并给最小 eval cases。
+Write a tool description for this function and include minimal eval cases.
 ```
 
-## 输出风格
+## Output Style
 
-简单创建任务通常返回：
+For simple creation tasks, the skill usually returns:
 
-- 可直接复制使用的 prompt
-- 使用说明
-- 必要假设
-- 最小 eval cases
+- copy-ready prompt
+- usage notes
+- necessary assumptions
+- minimal eval cases
 
-评审、改进、迁移或调试任务通常返回：
+For review, improvement, migration, or debugging tasks, the skill usually returns:
 
 - Prompt Artifact / Patch
 - Intervention Layer
@@ -144,11 +144,11 @@ skills/
 - Minimal Eval
 - Risk and Tradeoff
 
-## 边界
+## Boundaries
 
-Prompt Tuning 聚焦 prompt 和 prompt-adjacent instruction 工作。普通写作、通用代码 review、plugin 创建、skill 编写、安装流程和完整安全审计，更适合交给对应的专门工作流。
+Prompt Tuning focuses on prompt and prompt-adjacent instruction work. Ordinary writing, general code review, plugin creation, skill authoring, installation flows, and full security audits are better handled by dedicated workflows.
 
-模型供应商行为变化很快。任务涉及最新模型行为、tool calling、structured outputs、reasoning state、prompt caching 或 parser 规则时，应结合当前官方资料再次确认。
+Provider behavior changes quickly. When a task depends on latest model behavior, tool calling, structured outputs, reasoning state, prompt caching, or parser rules, check current official sources again.
 
 ## License
 
