@@ -74,6 +74,20 @@
         "artifact_first": false
       },
       "must_not": ["prompt patch", "Intervention Layer"]
+    },
+    {
+      "id": "negative-schema-only-runtime",
+      "request": "帮我修一个 JSON schema 校验问题，字段 age 应该是 number 但现在是 string。",
+      "query": "帮我修一个 JSON schema 校验问题，字段 age 应该是 number 但现在是 string。",
+      "fixtures": {},
+      "expected_trigger": false,
+      "expected_resources": [],
+      "max_questions": 0,
+      "output_assertions": {
+        "must_include": ["schema/runtime work without a prompt target"],
+        "artifact_first": false
+      },
+      "must_not": ["prompt patch", "Prompt Architecture"]
     }
   ],
   "adjacent_confusion": [
@@ -155,9 +169,7 @@
         "assets/prompt-review-template.md",
         "references/core-principles.md",
         "references/prompt-architecture-and-runtime-contract.md",
-        "references/context-and-agent-guidance.md",
-        "references/tool-and-structured-output-guidance.md",
-        "references/eval-and-optimization-method.md"
+        "references/context-and-agent-guidance.md"
       ],
       "max_questions": 1,
       "output_assertions": {

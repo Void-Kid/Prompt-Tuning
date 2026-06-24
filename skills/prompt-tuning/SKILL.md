@@ -1,6 +1,6 @@
 ---
 name: prompt-tuning
-description: 'Use when the target artifact or failure root cause is LLM prompt or instruction wording: create, review, improve, rewrite, migrate, debug, evaluate, or tune system/developer/user prompts, product/runtime system prompts, agent workflow prompts, prompts backed by code, agent instructions, tool/function descriptions, structured-output prompts, RAG/context instructions, judge prompts, eval prompts, or prompt templates. Also use for prompt assembly, schema/parser, repair loop, persistence, memory/history, or runtime contract issues that affect prompt behavior. Triggers include "帮我写 prompt", "优化这个提示词", "改进 system prompt", "评估产品 system prompt", "review this prompt", "migrate this prompt", "tool description 怎么写", "写一个 judge prompt", and "prompt tuning". Do not use for ordinary content writing, code review, product review, creating or tuning agent skills, SKILL.md work, plugin creation, skill installation, general AI education, or full security audits.'
+description: 'Use when the target artifact or failure root cause is LLM prompt or instruction wording: create, review, improve, rewrite, migrate, debug, evaluate, or tune system/developer/user prompts, product/runtime system prompts, agent workflow prompts, prompts backed by code, agent instructions, tool/function descriptions, structured-output prompts, RAG/context instructions, judge prompts, eval prompts, or prompt templates. Also use when prompt assembly, runtime contract, or repair loop issues cause prompt behavior failures. Triggers include "帮我写 prompt", "优化这个提示词", "改进 system prompt", "评估产品 system prompt", "review this prompt", "migrate this prompt", "tool description 怎么写", "写一个 judge prompt", and "prompt tuning". Do not use for ordinary content writing, pure schema/parser/runtime debugging without a prompt target, code review, product review, creating or tuning agent skills, SKILL.md work, plugin creation, skill installation, general AI education, or full security audits.'
 ---
 
 # Prompt Tuning
@@ -72,6 +72,7 @@ Use this skill to create, review, improve, patch, migrate, debug, and evaluate p
 
 Artifact first. Do not output empty sections.
 Default to Chinese-first labels and prose. Keep canonical contract terms such as Prompt Artifact / Patch, Intervention Layer, Non-Prompt Findings, and the compatibility alias Non-Prompt Requirements visible when they are part of the template or eval contract; for primarily English users, use English-first labels and prose. Keep enum values, file paths, commands, schema keys, and provider API names literal.
+For review/improve/debug tasks, this SKILL.md keeps the output skeleton. Use `assets/prompt-review-template.md` as the detailed source for section content when that template is loaded.
 
 For simple creation or "just give me the prompt" requests:
 
@@ -102,22 +103,22 @@ Prompt 产物 / Patch（Prompt Artifact / Patch）:
 - supporting: optional second layer when it affects the fix
 
 Prompt Architecture:
-- <section hierarchy, role/non-goals, dynamic context contract, evidence vs instruction boundary, examples, hard protocol layering; include only for product/runtime prompts>
+- <include only for product/runtime prompts>
 
 Runtime Contract:
-- <actual input objects, provider message envelope, schema/parser guarantees, repair loop, history/memory replay, persistence, observability; include only when runtime context matters>
+- <include only when runtime context matters>
 
 调整依据（Rationale）:
 - <why this intervention layer is the smallest effective change and what user-visible failure it addresses>
 
 非 Prompt 发现（Non-Prompt Findings） / 非 Prompt 侧要求（Non-Prompt Requirements）:
-- <schema, tool, context, runtime, model params, provider state replay, parser, persistence, repair, or eval requirements; omit when none matter>
+- <omit when none matter>
 
 Spec / Implementation Drift:
 - <prompt/spec/runtime mismatches; omit when none matter>
 
 Eval Coverage:
-- <existing eval quality, semantic gaps, runtime/schema coverage, missing badcases, and whether current tests only check substrings; omit only for simple prompt creation>
+- <omit only for simple prompt creation>
 
 最小 Eval（Minimal Eval）:
 - happy-path: <representative input that should pass>

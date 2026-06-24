@@ -38,6 +38,7 @@ Spec / Implementation Drift:
 Eval Coverage:
 - List existing eval quality, semantic gaps, runtime/schema coverage, missing badcases, and whether tests only assert substrings.
 - For product/runtime prompts, include semantic evals beyond happy-path, edge, and format cases.
+- Omit only for simple prompt creation.
 
 最小 Eval（Minimal Eval）:
 - happy-path:
