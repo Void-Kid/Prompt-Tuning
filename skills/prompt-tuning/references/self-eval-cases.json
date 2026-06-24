@@ -140,6 +140,30 @@
         "artifact_first": true
       },
       "must_not": ["start with theory", "hide the improved prompt after analysis"]
+    },
+    {
+      "id": "repair-history-contamination",
+      "request": "评估这个长期运行 agent 的 system prompt。它有 repair_instruction、repair_output 和历史 main_chain_output，帮我判断 prompt 是否需要改。",
+      "query": "评估这个长期运行 agent 的 system prompt。它有 repair_instruction、repair_output 和历史 main_chain_output，帮我判断 prompt 是否需要改。",
+      "fixtures": {
+        "current_prompt": "Use previous main_chain_output as context. If output is invalid, follow repair_instruction and continue.",
+        "runtime_signals": ["repair_instruction", "repair_output", "history replay"],
+        "failure": "repair output may re-enter future normal calls as assistant/user history"
+      },
+      "expected_trigger": true,
+      "expected_resources": [
+        "assets/prompt-review-template.md",
+        "references/prompt-architecture-and-runtime-contract.md",
+        "references/context-and-agent-guidance.md",
+        "references/tool-and-structured-output-guidance.md",
+        "references/eval-and-optimization-method.md"
+      ],
+      "max_questions": 1,
+      "output_assertions": {
+        "must_include": ["Runtime Contract", "Prompt Architecture", "repair", "history", "非 Prompt 发现（Non-Prompt Findings）", "Recommended Order of Work"],
+        "artifact_first": true
+      },
+      "must_not": ["only rewrite wording", "ignore repair-history contamination"]
     }
   ],
   "progressive_loading": [
@@ -155,7 +179,7 @@
       "expected_resources": ["references/models/index.md", "references/models/google.md", "references/tool-and-structured-output-guidance.md"],
       "max_questions": 1,
       "output_assertions": {
-        "must_include": ["thought signatures", "Prompt 产物 / Patch（Prompt Artifact / Patch）", "非 Prompt 侧要求（Non-Prompt Requirements）"],
+        "must_include": ["thought signatures", "Prompt 产物 / Patch（Prompt Artifact / Patch）", "非 Prompt 发现（Non-Prompt Findings）"],
         "artifact_first": true
       },
       "must_not": ["only rewrite wording", "ignore provider state"]
@@ -172,7 +196,7 @@
       "expected_resources": ["references/tool-and-structured-output-guidance.md", "assets/tool-description-contract.md"],
       "max_questions": 1,
       "output_assertions": {
-        "must_include": ["tool/schema contract", "tool description", "namespace", "非 Prompt 侧要求（Non-Prompt Requirements）", "最小 Eval（Minimal Eval）"],
+        "must_include": ["tool/schema contract", "tool description", "namespace", "非 Prompt 发现（Non-Prompt Findings）", "最小 Eval（Minimal Eval）"],
         "artifact_first": true
       },
       "must_not": ["only add please use the right tool", "ignore tool surface"]
@@ -246,7 +270,7 @@
       "expected_resources": ["assets/prompt-review-template.md", "references/tool-and-structured-output-guidance.md", "references/eval-and-optimization-method.md"],
       "max_questions": 0,
       "output_assertions": {
-        "must_include": ["Prompt 产物 / Patch（Prompt Artifact / Patch）", "干预层（Intervention Layer）", "structured output", "非 Prompt 侧要求（Non-Prompt Requirements）", "schema", "最小 Eval（Minimal Eval）"],
+        "must_include": ["Prompt 产物 / Patch（Prompt Artifact / Patch）", "干预层（Intervention Layer）", "structured output", "非 Prompt 发现（Non-Prompt Findings）", "schema", "最小 Eval（Minimal Eval）"],
         "artifact_first": true
       },
       "must_not": ["only make the prompt longer", "ignore schema"]
@@ -267,6 +291,50 @@
         "artifact_first": true
       },
       "must_not": ["omit eval cases", "label production prompt as low risk"]
+    },
+    {
+      "id": "product-runtime-architecture-review",
+      "request": "评估这个产品系统里的长期运行主链 system prompt。仓库里有 prompt assembly、schema/parser、repair loop、tests 和 spec，别只改 prompt 文案。",
+      "query": "评估这个产品系统里的长期运行主链 system prompt。仓库里有 prompt assembly、schema/parser、repair loop、tests 和 spec，别只改 prompt 文案。",
+      "fixtures": {
+        "current_prompt": "Use main_chain_output history. Do not reuse consumed observations. Create relations when signals match.",
+        "repo_files": [
+          "prompts/main_chain_system.md",
+          "runtime/prompt_assembly.ts",
+          "runtime/schema.ts",
+          "runtime/repair_loop.ts",
+          "docs/main_chain_spec.md",
+          "tests/main_chain_prompt.test.ts"
+        ],
+        "observed_failures": [
+          "prompt mentions message_kind but provider messages lack envelope",
+          "consumed observation refs are not tracked by runtime",
+          "llm_session_ref spec says logical session but implementation stores run id",
+          "substring prompt tests miss semantic failures"
+        ]
+      },
+      "expected_trigger": true,
+      "expected_resources": [
+        "assets/prompt-review-template.md",
+        "references/core-principles.md",
+        "references/prompt-architecture-and-runtime-contract.md",
+        "references/context-and-agent-guidance.md",
+        "references/tool-and-structured-output-guidance.md",
+        "references/eval-and-optimization-method.md"
+      ],
+      "max_questions": 1,
+      "output_assertions": {
+        "must_include": [
+          "Prompt Architecture",
+          "Runtime Contract",
+          "Spec / Implementation Drift",
+          "Eval Coverage",
+          "Recommended Order of Work",
+          "product-runtime-regression"
+        ],
+        "artifact_first": true
+      },
+      "must_not": ["only provide wording patch", "hide runtime/schema/spec findings in generic follow-up"]
     }
   ],
   "output_language": [
@@ -318,7 +386,7 @@
       "expected_resources": ["references/models/index.md", "references/models/openai.md", "references/models/google.md", "references/models/kimi.md", "references/models/qwen.md", "references/tool-and-structured-output-guidance.md", "references/migration-playbook.md"],
       "max_questions": 1,
       "output_assertions": {
-        "must_include": ["reasoning items", "thought signatures", "reasoning_content", "thinking mode", "非 Prompt 侧要求（Non-Prompt Requirements）"],
+        "must_include": ["reasoning items", "thought signatures", "reasoning_content", "thinking mode", "非 Prompt 发现（Non-Prompt Findings）"],
         "artifact_first": true
       },
       "must_not": ["treat reasoning state as prompt text", "ignore provider state"]

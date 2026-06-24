@@ -12,9 +12,11 @@ Use this skill to create, review, improve, patch, migrate, debug, and evaluate p
 1. Classify the request type: `create`, `review`, `improve`, `migrate`, `debug`, `eval`, or `model-specific`.
 2. Identify the target object: `system prompt`, `developer prompt`, `user prompt`, `agent instructions`, `tool description`, `structured-output prompt`, `RAG/context instructions`, `judge prompt`, or `eval prompt`.
 3. Identify the target model/provider, runtime, input variables, expected output, failure examples, tool/schema/context constraints, cost constraints, latency constraints, and current/latest/provider-specific claims.
-4. Diagnose the primary intervention layer before rewriting:
+4. Apply the Product/Runtime Prompt Gate when the prompt is embedded in a product pipeline, agent workflow, long-running session, RAG/context assembly, tool/schema output, memory/history flow, persistence path, or repair loop. In that case, inspect or request the prompt file, runtime prompt assembly, schema/parser, repair loop, tests, and spec before treating the prompt as isolated text.
+5. Diagnose the primary intervention layer before rewriting:
    - `prompt wording`
    - `instruction hierarchy`
+   - `prompt architecture`
    - `tool/schema contract`
    - `structured output`
    - `context/RAG`
@@ -22,12 +24,12 @@ Use this skill to create, review, improve, patch, migrate, debug, and evaluate p
    - `reasoning/provider state`
    - `model params/model choice`
    - `eval gap`
-5. Choose the smallest effective intervention. If schema, tool surface, context, provider state, model parameters, or evals are the real bottleneck, still provide the smallest useful prompt change and list the required non-prompt change separately.
-6. Apply the Freshness Gate for current/latest/provider-specific behavior: use official current sources or a recently checked `references/source-map.md` entry before making model/provider claims.
-7. Load only the resources needed by the table below.
-8. Produce the prompt, prompt patch, tool description, judge prompt, or concrete recommendations before theory.
-9. Add minimal eval cases for important changes.
-10. Explain user impact, risk, and added complexity briefly.
+6. Choose the smallest effective intervention. If schema, tool surface, context, provider state, model parameters, runtime contract, persistence, spec drift, repair flow, or evals are the real bottleneck, still provide the smallest useful prompt change and list the required non-prompt change separately.
+7. Apply the Freshness Gate for current/latest/provider-specific behavior: use official current sources or a recently checked `references/source-map.md` entry before making model/provider claims.
+8. Load only the resources needed by the table below.
+9. Produce the prompt, prompt patch, tool description, judge prompt, architecture recommendations, runtime findings, or concrete recommendations before theory.
+10. Add minimal eval cases for important changes.
+11. Explain user impact, risk, and added complexity briefly.
 
 ## Low-Info Requests
 
@@ -48,6 +50,7 @@ Use this skill to create, review, improve, patch, migrate, debug, and evaluate p
 | --- | --- |
 | Complex review/improve/debug/migration or user asks for rationale | `references/core-principles.md` |
 | Diagnosing intervention layer, non-prompt root cause, or smallest effective change | `references/core-principles.md`, then the specific reference for the selected layer |
+| Product/runtime system prompt, long-running agent prompt, prompt assembly, schema/parser, persistence, repair loop, history/memory, or spec drift is involved | `references/core-principles.md`, `references/prompt-architecture-and-runtime-contract.md`, `references/context-and-agent-guidance.md`, `references/tool-and-structured-output-guidance.md`, `references/eval-and-optimization-method.md` |
 | Target model/provider is named or migration is requested | `references/models/index.md`, then the relevant provider file |
 | Current/latest/provider-specific claims or source freshness checks | `references/source-map.md`, and official provider docs when the source map is stale |
 | Agent instructions, RAG, memory, long context, prompt caching, or context compaction | `references/context-and-agent-guidance.md` |
@@ -68,7 +71,7 @@ Use this skill to create, review, improve, patch, migrate, debug, and evaluate p
 ## Output Policy
 
 Artifact first. Do not output empty sections.
-Default to Chinese-first labels and prose. Keep canonical contract terms such as Prompt Artifact / Patch, Intervention Layer, and Non-Prompt Requirements visible when they are part of the template or eval contract; for primarily English users, use English-first labels and prose. Keep enum values, file paths, commands, schema keys, and provider API names literal.
+Default to Chinese-first labels and prose. Keep canonical contract terms such as Prompt Artifact / Patch, Intervention Layer, and Non-Prompt Findings visible when they are part of the template or eval contract; for primarily English users, use English-first labels and prose. Keep enum values, file paths, commands, schema keys, and provider API names literal.
 
 For simple creation or "just give me the prompt" requests:
 
@@ -95,19 +98,37 @@ Prompt 产物 / Patch（Prompt Artifact / Patch）:
 <copy-ready prompt, replacement, SEARCH/REPLACE patch, unified diff, section-level patch, tool description, or judge prompt>
 
 干预层（Intervention Layer）:
-- primary: prompt wording | instruction hierarchy | tool/schema contract | structured output | context/RAG | memory/compaction | reasoning/provider state | model params/model choice | eval gap
+- primary: prompt wording | instruction hierarchy | prompt architecture | tool/schema contract | structured output | context/RAG | memory/compaction | reasoning/provider state | model params/model choice | eval gap
 - supporting: optional second layer when it affects the fix
+
+Prompt Architecture:
+- <section hierarchy, role/non-goals, dynamic context contract, evidence vs instruction boundary, examples, hard protocol layering; include only for product/runtime prompts>
+
+Runtime Contract:
+- <actual input objects, provider message envelope, schema/parser guarantees, repair loop, history/memory replay, persistence, observability; include only when runtime context matters>
 
 调整依据（Rationale）:
 - <why this intervention layer is the smallest effective change and what user-visible failure it addresses>
 
-非 Prompt 侧要求（Non-Prompt Requirements）:
-- <schema, tool, context, runtime, model params, provider state replay, parser, or eval requirements; omit when none matter>
+非 Prompt 发现（Non-Prompt Findings）:
+- <schema, tool, context, runtime, model params, provider state replay, parser, persistence, repair, or eval requirements; omit when none matter>
+
+Spec / Implementation Drift:
+- <prompt/spec/runtime mismatches; omit when none matter>
+
+Eval Coverage:
+- <existing eval quality, semantic gaps, runtime/schema coverage, missing badcases, and whether current tests only check substrings; omit only for simple prompt creation>
 
 最小 Eval（Minimal Eval）:
 - happy-path: <representative input that should pass>
 - edge-or-ambiguous: <short, missing, ambiguous, or adversarial input>
 - forbidden-or-format-regression: <case that catches hard-rule, schema, parser, or old-failure regression>
+- product-runtime-regression: <context, schema, ref, repair, history, persistence, or semantic eval case; include for product/runtime prompts>
+
+Recommended Order of Work:
+- A. prompt-only: <prompt structure or wording changes>
+- B. runtime/schema/spec required: <runtime, schema, parser, persistence, repair, context, observability, or spec changes>
+- C. defer pending evidence: <badcase, eval, provider behavior, or product decision needed>
 
 风险和取舍（Risk And Tradeoff）:
 - <complexity, cost, latency, portability, provider fit, or unverified source risk>
@@ -123,6 +144,7 @@ Prompt 产物 / Patch（Prompt Artifact / Patch）:
 ## Gotchas
 
 - Do not turn every issue into a longer prompt. Prefer schema, tool contracts, context design, or provider parameters when they control behavior more reliably.
+- Do not treat product/runtime prompts as isolated text artifacts. If a prompt controls a long-running agent or workflow, check context assembly, schema, memory/history, repair loop, persistence, and spec drift before proposing only wording changes.
 - Do not add chain-of-thought instructions by default. For current reasoning models, prefer outcome-first instructions and provider reasoning controls.
 - Reasoning artifacts are API/context state, not ordinary prompt text. Check provider preserve, strip, replay, or parse rules in multi-turn tool flows.
 - Tool-use failures often come from tool surface design, not wording. Check tool count, namespaces, deferred tools, merge candidates, code-known parameters, return shape, side effects, and idempotency.
