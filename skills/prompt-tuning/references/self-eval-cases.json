@@ -320,7 +320,8 @@
           "Spec / Implementation Drift",
           "Eval Coverage",
           "Recommended Order of Work",
-          "product-runtime-regression"
+          "product-runtime-regression",
+          "非 Prompt 发现（Non-Prompt Findings）"
         ],
         "artifact_first": true
       },
