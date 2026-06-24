@@ -88,6 +88,20 @@
         "artifact_first": false
       },
       "must_not": ["prompt patch", "Prompt Architecture"]
+    },
+    {
+      "id": "negative-runtime-contract-no-prompt-target",
+      "request": "我的 API runtime contract 有问题，response schema 和 spec 不一致，帮我排查。",
+      "query": "我的 API runtime contract 有问题，response schema 和 spec 不一致，帮我排查。",
+      "fixtures": {},
+      "expected_trigger": false,
+      "expected_resources": [],
+      "max_questions": 0,
+      "output_assertions": {
+        "must_include": ["no prompt target"],
+        "artifact_first": false
+      },
+      "must_not": ["Prompt Architecture", "Runtime Contract", "prompt patch"]
     }
   ],
   "adjacent_confusion": [
@@ -321,7 +335,8 @@
           "Eval Coverage",
           "Recommended Order of Work",
           "product-runtime-regression",
-          "非 Prompt 发现（Non-Prompt Findings）"
+          "非 Prompt 发现（Non-Prompt Findings）",
+          "Non-Prompt Requirements"
         ],
         "artifact_first": true
       },

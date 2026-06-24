@@ -1,6 +1,6 @@
 ---
 name: prompt-tuning
-description: 'Use when the target artifact or failure root cause is LLM prompt or instruction wording, including product/runtime system prompts, agent workflow prompts, and prompts backed by code. Covers prompt creation, review, improvement, migration, debugging, evaluation, agent instructions, tool/function descriptions, structured-output prompts, RAG/context instructions, judge/eval prompts, and prompt templates. Also use for prompt assembly or runtime contract failures when user intent is to change or evaluate a prompt target. Do NOT use for pure schema/parser/runtime debugging without a prompt target, ordinary content writing, code review, product review, creating or tuning agent skills, SKILL.md work, plugin creation, skill installation, general AI education, or full security audits. Triggers include "帮我写 prompt", "优化这个提示词", "评估产品 system prompt", "review this prompt", and "prompt tuning".'
+description: 'Use when the target artifact or failure root cause is LLM prompt or instruction wording, including product/runtime system prompts, agent workflow prompts, and prompts backed by code. Covers prompt creation, review, improvement, migration, debugging, evaluation, agent instructions, tool/function descriptions, structured-output prompts, RAG/context instructions, judge/eval prompts, and prompt templates. Also use for prompt assembly or runtime contract failures when user intent is to change or evaluate a prompt target. Do NOT use for pure schema/parser/runtime debugging without a prompt target, ordinary content writing, code review, product review, creating or tuning agent skills, SKILL.md work, plugin creation, skill installation, general AI education, or full security audits. Triggers include "帮我写 prompt", "优化这个提示词", "评估产品 system prompt", "review this prompt", "migrate this prompt", "tool description 怎么写", "写一个 judge prompt", and "prompt tuning".'
 ---
 
 # Prompt Tuning
@@ -50,7 +50,7 @@ Use this skill to create, review, improve, patch, migrate, debug, and evaluate p
 | --- | --- |
 | Complex review/improve/debug/migration or user asks for rationale | `references/core-principles.md` |
 | Diagnosing intervention layer, non-prompt root cause, or smallest effective change | `references/core-principles.md`, then the specific reference for the selected layer |
-| Product/runtime system prompt, long-running agent prompt, prompt assembly, schema/parser, persistence, repair loop, history/memory, or spec drift is involved | Load `references/core-principles.md` and `references/prompt-architecture-and-runtime-contract.md` first; then load `references/context-and-agent-guidance.md`, `references/tool-and-structured-output-guidance.md`, or `references/eval-and-optimization-method.md` only when the diagnosed layer requires them |
+| Product/runtime prompt, runtime contract, long-running agent prompt, prompt assembly, repair/history, persistence, or spec drift is involved | Load `references/core-principles.md` and `references/prompt-architecture-and-runtime-contract.md` first; then load `references/context-and-agent-guidance.md`, `references/tool-and-structured-output-guidance.md`, or `references/eval-and-optimization-method.md` only when the diagnosed layer requires them |
 | Target model/provider is named or migration is requested | `references/models/index.md`, then the relevant provider file |
 | Current/latest/provider-specific claims or source freshness checks | `references/source-map.md`, and official provider docs when the source map is stale |
 | Agent instructions, RAG, memory, long context, prompt caching, or context compaction | `references/context-and-agent-guidance.md` |
@@ -99,7 +99,8 @@ Prompt 产物 / Patch（Prompt Artifact / Patch）:
 <copy-ready artifact or patch>
 
 干预层（Intervention Layer）:
-<primary layer; add supporting layer only when needed>
+- primary: prompt wording | instruction hierarchy | prompt architecture | tool/schema contract | structured output | context/RAG | memory/compaction | reasoning/provider state | model params/model choice | eval gap
+- supporting: add only when it changes the fix
 
 Prompt Architecture:
 <include only for product/runtime prompts>
