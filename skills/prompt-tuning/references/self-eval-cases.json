@@ -153,6 +153,7 @@
       "expected_trigger": true,
       "expected_resources": [
         "assets/prompt-review-template.md",
+        "references/core-principles.md",
         "references/prompt-architecture-and-runtime-contract.md",
         "references/context-and-agent-guidance.md",
         "references/tool-and-structured-output-guidance.md",
@@ -160,7 +161,7 @@
       ],
       "max_questions": 1,
       "output_assertions": {
-        "must_include": ["Runtime Contract", "Prompt Architecture", "repair", "history", "非 Prompt 发现（Non-Prompt Findings）", "Recommended Order of Work"],
+        "must_include": ["Runtime Contract", "Prompt Architecture", "repair", "history", "非 Prompt 发现（Non-Prompt Findings）", "Non-Prompt Requirements", "Recommended Order of Work"],
         "artifact_first": true
       },
       "must_not": ["only rewrite wording", "ignore repair-history contamination"]

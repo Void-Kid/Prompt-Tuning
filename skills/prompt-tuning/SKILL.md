@@ -1,6 +1,6 @@
 ---
 name: prompt-tuning
-description: 'Use when the target artifact or failure root cause is LLM prompt or instruction wording: create, review, improve, rewrite, migrate, debug, evaluate, or tune system/developer/user prompts, agent instructions, tool/function descriptions, structured-output prompts, RAG/context instructions, judge prompts, eval prompts, or prompt templates. Triggers include "帮我写 prompt", "优化这个提示词", "改进 system prompt", "review this prompt", "migrate this prompt", "tool description 怎么写", "写一个 judge prompt", and "prompt tuning". Do not use for ordinary content writing, code review, product review, creating or tuning agent skills, SKILL.md work, plugin creation, skill installation, general AI education, or full security audits.'
+description: 'Use when the target artifact or failure root cause is LLM prompt or instruction wording: create, review, improve, rewrite, migrate, debug, evaluate, or tune system/developer/user prompts, product/runtime system prompts, agent workflow prompts, prompts backed by code, agent instructions, tool/function descriptions, structured-output prompts, RAG/context instructions, judge prompts, eval prompts, or prompt templates. Also use for prompt assembly, schema/parser, repair loop, persistence, memory/history, or runtime contract issues that affect prompt behavior. Triggers include "帮我写 prompt", "优化这个提示词", "改进 system prompt", "评估产品 system prompt", "review this prompt", "migrate this prompt", "tool description 怎么写", "写一个 judge prompt", and "prompt tuning". Do not use for ordinary content writing, code review, product review, creating or tuning agent skills, SKILL.md work, plugin creation, skill installation, general AI education, or full security audits.'
 ---
 
 # Prompt Tuning
@@ -12,7 +12,7 @@ Use this skill to create, review, improve, patch, migrate, debug, and evaluate p
 1. Classify the request type: `create`, `review`, `improve`, `migrate`, `debug`, `eval`, or `model-specific`.
 2. Identify the target object: `system prompt`, `developer prompt`, `user prompt`, `agent instructions`, `tool description`, `structured-output prompt`, `RAG/context instructions`, `judge prompt`, or `eval prompt`.
 3. Identify the target model/provider, runtime, input variables, expected output, failure examples, tool/schema/context constraints, cost constraints, latency constraints, and current/latest/provider-specific claims.
-4. Apply the Product/Runtime Prompt Gate when the prompt is embedded in a product pipeline, agent workflow, long-running session, RAG/context assembly, tool/schema output, memory/history flow, persistence path, or repair loop. In that case, inspect or request the prompt file, runtime prompt assembly, schema/parser, repair loop, tests, and spec before treating the prompt as isolated text.
+4. Apply the Product/Runtime Prompt Gate when the prompt is embedded in a product pipeline, agent workflow, long-running session, RAG/context assembly, tool/schema output, memory/history flow, persistence path, or repair loop. Skip this gate for standalone pasted prompts without backing code or runtime context. When the gate applies, inspect or request the prompt file, runtime prompt assembly, schema/parser, repair loop, tests, and spec before treating the prompt as isolated text.
 5. Diagnose the primary intervention layer before rewriting:
    - `prompt wording`
    - `instruction hierarchy`
@@ -50,7 +50,7 @@ Use this skill to create, review, improve, patch, migrate, debug, and evaluate p
 | --- | --- |
 | Complex review/improve/debug/migration or user asks for rationale | `references/core-principles.md` |
 | Diagnosing intervention layer, non-prompt root cause, or smallest effective change | `references/core-principles.md`, then the specific reference for the selected layer |
-| Product/runtime system prompt, long-running agent prompt, prompt assembly, schema/parser, persistence, repair loop, history/memory, or spec drift is involved | `references/core-principles.md`, `references/prompt-architecture-and-runtime-contract.md`, `references/context-and-agent-guidance.md`, `references/tool-and-structured-output-guidance.md`, `references/eval-and-optimization-method.md` |
+| Product/runtime system prompt, long-running agent prompt, prompt assembly, schema/parser, persistence, repair loop, history/memory, or spec drift is involved | Load `references/core-principles.md` and `references/prompt-architecture-and-runtime-contract.md` first; then load `references/context-and-agent-guidance.md`, `references/tool-and-structured-output-guidance.md`, or `references/eval-and-optimization-method.md` only when the diagnosed layer requires them |
 | Target model/provider is named or migration is requested | `references/models/index.md`, then the relevant provider file |
 | Current/latest/provider-specific claims or source freshness checks | `references/source-map.md`, and official provider docs when the source map is stale |
 | Agent instructions, RAG, memory, long context, prompt caching, or context compaction | `references/context-and-agent-guidance.md` |
@@ -71,7 +71,7 @@ Use this skill to create, review, improve, patch, migrate, debug, and evaluate p
 ## Output Policy
 
 Artifact first. Do not output empty sections.
-Default to Chinese-first labels and prose. Keep canonical contract terms such as Prompt Artifact / Patch, Intervention Layer, and Non-Prompt Findings visible when they are part of the template or eval contract; for primarily English users, use English-first labels and prose. Keep enum values, file paths, commands, schema keys, and provider API names literal.
+Default to Chinese-first labels and prose. Keep canonical contract terms such as Prompt Artifact / Patch, Intervention Layer, Non-Prompt Findings, and the compatibility alias Non-Prompt Requirements visible when they are part of the template or eval contract; for primarily English users, use English-first labels and prose. Keep enum values, file paths, commands, schema keys, and provider API names literal.
 
 For simple creation or "just give me the prompt" requests:
 
@@ -110,7 +110,7 @@ Runtime Contract:
 调整依据（Rationale）:
 - <why this intervention layer is the smallest effective change and what user-visible failure it addresses>
 
-非 Prompt 发现（Non-Prompt Findings）:
+非 Prompt 发现（Non-Prompt Findings） / 非 Prompt 侧要求（Non-Prompt Requirements）:
 - <schema, tool, context, runtime, model params, provider state replay, parser, persistence, repair, or eval requirements; omit when none matter>
 
 Spec / Implementation Drift:
@@ -129,6 +129,7 @@ Recommended Order of Work:
 - A. prompt-only: <prompt structure or wording changes>
 - B. runtime/schema/spec required: <runtime, schema, parser, persistence, repair, context, observability, or spec changes>
 - C. defer pending evidence: <badcase, eval, provider behavior, or product decision needed>
+- <include only when product/runtime review, mixed prompt/non-prompt work, or sequencing matters; omit for simple prompt creation or single-layer fixes>
 
 风险和取舍（Risk And Tradeoff）:
 - <complexity, cost, latency, portability, provider fit, or unverified source risk>

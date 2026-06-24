@@ -27,7 +27,7 @@ Runtime Contract:
 - Explain why this intervention layer is the smallest effective change.
 - Call out missing eval evidence when the recommendation is not yet verified.
 
-非 Prompt 发现（Non-Prompt Findings）:
+非 Prompt 发现（Non-Prompt Findings） / 非 Prompt 侧要求（Non-Prompt Requirements）:
 - Use this for schema, tool surface, context, provider state, model parameters, evals, parser, API, repair, persistence, observability, or product changes.
 - Omit this section only when no non-prompt finding matters.
 
@@ -50,6 +50,7 @@ Recommended Order of Work:
 - A. prompt-only:
 - B. runtime/schema/spec required:
 - C. defer pending evidence:
+- Include only when product/runtime review, mixed prompt/non-prompt work, or sequencing matters; omit for simple prompt creation or single-layer fixes.
 
 风险和取舍（Risk And Tradeoff）:
 - Include added complexity, cost, latency, portability, provider-specific risk, and source freshness risk.
