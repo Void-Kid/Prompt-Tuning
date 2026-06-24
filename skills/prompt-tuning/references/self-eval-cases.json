@@ -154,29 +154,6 @@
         "artifact_first": true
       },
       "must_not": ["start with theory", "hide the improved prompt after analysis"]
-    },
-    {
-      "id": "repair-history-contamination",
-      "request": "评估这个长期运行 agent 的 system prompt。它有 repair_instruction、repair_output 和历史 main_chain_output，帮我判断 prompt 是否需要改。",
-      "query": "评估这个长期运行 agent 的 system prompt。它有 repair_instruction、repair_output 和历史 main_chain_output，帮我判断 prompt 是否需要改。",
-      "fixtures": {
-        "current_prompt": "Use previous main_chain_output as context. If output is invalid, follow repair_instruction and continue.",
-        "runtime_signals": ["repair_instruction", "repair_output", "history replay"],
-        "failure": "repair output may re-enter future normal calls as assistant/user history"
-      },
-      "expected_trigger": true,
-      "expected_resources": [
-        "assets/prompt-review-template.md",
-        "references/core-principles.md",
-        "references/prompt-architecture-and-runtime-contract.md",
-        "references/context-and-agent-guidance.md"
-      ],
-      "max_questions": 1,
-      "output_assertions": {
-        "must_include": ["Runtime Contract", "Prompt Architecture", "repair", "history", "非 Prompt 发现（Non-Prompt Findings）", "Non-Prompt Requirements", "Recommended Order of Work"],
-        "artifact_first": true
-      },
-      "must_not": ["only rewrite wording", "ignore repair-history contamination"]
     }
   ],
   "progressive_loading": [
@@ -348,6 +325,29 @@
         "artifact_first": true
       },
       "must_not": ["only provide wording patch", "hide runtime/schema/spec findings in generic follow-up"]
+    },
+    {
+      "id": "repair-history-contamination",
+      "request": "评估这个长期运行 agent 的 system prompt。它有 repair_instruction、repair_output 和历史 main_chain_output，帮我判断 prompt 是否需要改。",
+      "query": "评估这个长期运行 agent 的 system prompt。它有 repair_instruction、repair_output 和历史 main_chain_output，帮我判断 prompt 是否需要改。",
+      "fixtures": {
+        "current_prompt": "Use previous main_chain_output as context. If output is invalid, follow repair_instruction and continue.",
+        "runtime_signals": ["repair_instruction", "repair_output", "history replay"],
+        "failure": "repair output may re-enter future normal calls as assistant/user history"
+      },
+      "expected_trigger": true,
+      "expected_resources": [
+        "assets/prompt-review-template.md",
+        "references/core-principles.md",
+        "references/prompt-architecture-and-runtime-contract.md",
+        "references/context-and-agent-guidance.md"
+      ],
+      "max_questions": 1,
+      "output_assertions": {
+        "must_include": ["Runtime Contract", "Prompt Architecture", "repair", "history", "非 Prompt 发现（Non-Prompt Findings）", "Non-Prompt Requirements", "Recommended Order of Work"],
+        "artifact_first": true
+      },
+      "must_not": ["only rewrite wording", "ignore repair-history contamination"]
     }
   ],
   "output_language": [
